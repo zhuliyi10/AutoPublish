@@ -13,7 +13,7 @@ from qwindow import Qwindow
 
 # 上传今日头条小视频
 def uploadTaoTiao(videoBean):
-    wait = ui.WebDriverWait(browser, 10)  # 10秒内每隔500毫秒扫描1次页面变化
+    wait = ui.WebDriverWait(browser, 30)  # 10秒内每隔500毫秒扫描1次页面变化
     browser.execute_script('window.open()')
     browser.switch_to_window(browser.window_handles[len(browser.window_handles)-1])
     # # 今日头条上传视频
@@ -32,7 +32,7 @@ def uploadTaoTiao(videoBean):
 
 #上传全民小视频
 def uploadQuanming(videoBean):
-    wait = ui.WebDriverWait(browser, 10)  # 10秒内每隔500毫秒扫描1次页面变化
+    wait = ui.WebDriverWait(browser, 30)  # 10秒内每隔500毫秒扫描1次页面变化
     browser.execute_script('window.open()')
     browser.switch_to_window(browser.window_handles[len(browser.window_handles)-1])
     browser.get("https://mcn.baidu.com/publish/upload")
@@ -51,7 +51,7 @@ def uploadQuanming(videoBean):
 
 # 上传快手小视频
 def uploadKuaishou(videoBean):
-    wait = ui.WebDriverWait(browser, 10)  # 10秒内每隔500毫秒扫描1次页面变化
+    wait = ui.WebDriverWait(browser, 30)  # 10秒内每隔500毫秒扫描1次页面变化
     browser.execute_script('window.open()')
     browser.switch_to_window(browser.window_handles[len(browser.window_handles)-1])
     browser.get("https://cp.kuaishou.com/article/publish/video")
@@ -62,13 +62,14 @@ def uploadKuaishou(videoBean):
     print("开始上传快手小视频")
     wait.until(lambda driver: browser.find_element_by_xpath("//i[@class='iconfont icon-check-succeed green']"))
     print("快手小视频上传成功")
-    browser.find_element_by_xpath("//textarea[@class='el-textarea__inner']").send_keys(
-        videoBean.title)
-    browser.find_element_by_xpath("//button[@class='el-button el-button--primary el-button--medium']").click()   
+    browser.find_element_by_xpath("//textarea[@class='el-textarea__inner']").send_keys(videoBean.title)
+    release=browser.find_element_by_xpath("//div[@class='container__content__body']//button[@class='el-button el-button--primary el-button--medium']")
+    release.click()
+
 
 # 上传抖音小视频
 def uploadDouyin(videoBean):
-    wait = ui.WebDriverWait(browser, 10)  # 10秒内每隔500毫秒扫描1次页面变化
+    wait = ui.WebDriverWait(browser, 30)  # 10秒内每隔500毫秒扫描1次页面变化
     browser.execute_script('window.open()')
     browser.switch_to_window(browser.window_handles[len(browser.window_handles)-1])
     browser.get("https://media.douyin.com/#/upload")
@@ -86,7 +87,7 @@ def uploadDouyin(videoBean):
 
 # 上传大鱼号小视频
 def uploadDayu(videoBean):
-    wait = ui.WebDriverWait(browser, 10)  # 10秒内每隔500毫秒扫描1次页面变化
+    wait = ui.WebDriverWait(browser, 30)  # 10秒内每隔500毫秒扫描1次页面变化
     browser.execute_script('window.open()')
     browser.switch_to_window(browser.window_handles[len(browser.window_handles)-1])
     browser.get("https://mp.dayu.com/dashboard/minivideo/write?spm=a2s0i.db_article_write.content.3.7e293caatzoXXJ")
@@ -105,11 +106,12 @@ def uploadDayu(videoBean):
     cover=browser.find_element_by_xpath("//div[@class='minivideo-cover']")
     ActionChains(browser).move_to_element(cover).perform()
     browser.find_element_by_xpath("//div[@class='minivideo-cover']//button[text()='从视频截图中选择']").click()   
-    sleep(1)
+    wait.until(lambda driver: browser.find_element_by_xpath("//div[@class='article-material-image_image-choose']//div"))
     browser.find_element_by_xpath("//div[@class='article-material-image_image-choose']//div").click()   
     browser.find_element_by_xpath("//button[text()='下一步']").click()   
     sleep(2)
     browser.find_element_by_xpath("//button[text()='保存']").click()   
+    sleep(3)
     # browser.find_element_by_xpath("//div[@class='w-form-field-content']/input[@type='file']").send_keys(videoBean.picPath)
     # sleep(3)
     # browser.find_element_by_xpath("//div[@class='widgets-pop w-scrollbar']//button[@class='w-btn w-btn_primary']").click()  
