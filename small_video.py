@@ -3,6 +3,7 @@ from time import sleep
 from selenium.webdriver.chrome.options import Options
 from selenium.webdriver.support import ui
 from selenium.webdriver.common.action_chains import ActionChains
+from selenium.webdriver.common.keys import Keys
 import sys
 from videobean import VideoBean
 
@@ -102,19 +103,19 @@ def uploadDayu(videoBean):
     browser.switch_to_window(browser.window_handles[len(browser.window_handles)-1])
     browser.get("https://mp.dayu.com/dashboard/minivideo/write?spm=a2s0i.db_article_write.content.3.7e293caatzoXXJ")
     sleep(3)
-    browser.find_element_by_xpath("//input[@class='webuploader-element-invisible']").send_keys(
-        videoBean.videoPath)
+    browser.find_element_by_xpath("//input[@class='webuploader-element-invisible']").send_keys(videoBean.videoPath)
     # 等待页面加载
     print("开始上传大鱼号小视频")
-    browser.find_element_by_xpath("//div[@class='w-form-field-content']/input[@type='file']").send_keys(videoBean.picPath)
     browser.find_element_by_xpath("//input[@id='SCOPE_titletext']").send_keys(videoBean.title)
     sleep(2)
+    browser.find_element_by_xpath("//div[@class='w-form-field-content']/input[@type='file']").send_keys(videoBean.picPath)
+    sleep(8)
     browser.find_element_by_xpath("//button[text()='保存']").click()   
+    sleep(3)
     status = browser.find_element_by_xpath("//p[@class='converting_video_name']").text
     while status == "":
         sleep(2)
         status = browser.find_element_by_xpath("//p[@class='converting_video_name']").text
-    sleep(2)
     print("大鱼号小视频上传成功")
     # cover=browser.find_element_by_xpath("//div[@class='minivideo-cover']")
     # ActionChains(browser).move_to_element(cover).perform()
@@ -128,16 +129,34 @@ def uploadDayu(videoBean):
     
     browser.find_element_by_xpath("//div[@class='minivideo_opt']//button[@class='w-btn w-btn_primary']").click()   
 
+
+# 上传爱奇艺小视频
+def uploadIqiyi(videoBean):
+    wait = ui.WebDriverWait(browser, 100)  # 10秒内每隔500毫秒扫描1次页面变化
+    browser.execute_script('window.open()')
+    browser.switch_to_window(browser.window_handles[len(browser.window_handles)-1])
+    browser.get("https://mp.iqiyi.com/wemedia/publish/videoLte")
+    sleep(6)
+    browser.find_element_by_xpath("//input").send_keys(videoBean.videoPath)
+    sleep(8)
+    browser.find_element_by_xpath("//input[@class='mp-upload__input']").send_keys(videoBean.picPath)
+    sleep(5)
+    wait.until(lambda driver: browser.find_element_by_xpath("//i[@class='mp-iconsvg svg-complete rt']"))
+    sleep(2)
+    browser.find_element_by_xpath("//input[@class='mp-input__inner']").send_keys(Keys.CONTROL + "a")
+    browser.find_element_by_xpath("//input[@class='mp-input__inner']").send_keys(videoBean.title)
+    browser.find_element_by_xpath("//button[@class='mp-button mp-button--success is-animate']").click() 
 def onPublishVideo(videoBean):
         print(videoBean.title)
         print(videoBean.desc)
         print(videoBean.videoPath)
         print(videoBean.picPath)
-        # uploadTaoTiao(videoBean)
-        # uploadQuanming(videoBean)
+        uploadTaoTiao(videoBean)
+        uploadQuanming(videoBean)
         uploadKuaishou(videoBean)
-        # uploadDouyin(videoBean)
-        # uploadDayu(videoBean)
+        uploadDouyin(videoBean)
+        uploadDayu(videoBean)
+        uploadIqiyi(videoBean)
 
 
 if __name__ == "__main__":

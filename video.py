@@ -14,7 +14,7 @@ from qwindow import Qwindow
 
 # 今日头条
 def uploadTaoTiao(videoBean):
-    wait = ui.WebDriverWait(browser, 60)  # 10秒内每隔500毫秒扫描1次页面变化
+    wait = ui.WebDriverWait(browser, 600)  # 10秒内每隔500毫秒扫描1次页面变化
     browser.execute_script('window.open()')
     browser.switch_to_window(browser.window_handles[len(browser.window_handles)-1])
     browser.get("https://mp.toutiao.com/profile_v3/xigua/upload-video?index=0")
@@ -55,7 +55,7 @@ def uploadTaoTiao(videoBean):
 
 # 百家号
 def uploadBaiJiaHao(videoBean):
-    wait = ui.WebDriverWait(browser, 60)  # 10秒内每隔500毫秒扫描1次页面变化
+    wait = ui.WebDriverWait(browser, 600)  # 10秒内每隔500毫秒扫描1次页面变化
     browser.execute_script('window.open()')
     browser.switch_to_window(browser.window_handles[len(browser.window_handles)-1])
     browser.get("https://baijiahao.baidu.com/builder/rc/edit?type=video")
@@ -84,6 +84,7 @@ def uploadBaiJiaHao(videoBean):
 
     # 等待页面加载
     wait.until(lambda driver: browser.find_element_by_xpath("//span[@class='okIcon']"))
+    sleep(2)
     browser.find_element_by_xpath("//button[@class='ant-btn bjh-btn-normal op-publish ant-btn-primary']").click()
     print("百家号发表成功")
 
@@ -91,7 +92,7 @@ def uploadBaiJiaHao(videoBean):
 
 # 企鹅号
 def uploadQiE(videoBean):
-    wait = ui.WebDriverWait(browser, 60)  # 10秒内每隔500毫秒扫描1次页面变化
+    wait = ui.WebDriverWait(browser, 600)  # 10秒内每隔500毫秒扫描1次页面变化
     browser.execute_script('window.open()')
     browser.switch_to_window(browser.window_handles[len(browser.window_handles)-1])
     browser.get("https://om.qq.com/article/videoPublish")
@@ -128,7 +129,7 @@ def uploadQiE(videoBean):
 
 # 大鱼号
 def uploadDaYu(videoBean):
-    wait = ui.WebDriverWait(browser, 60)  # 10秒内每隔500毫秒扫描1次页面变化
+    wait = ui.WebDriverWait(browser, 600)  # 10秒内每隔500毫秒扫描1次页面变化
     browser.execute_script('window.open()')
     browser.switch_to_window(browser.window_handles[len(browser.window_handles)-1])
     browser.get("https://mp.dayu.com/dashboard/video/write?spm=a2s0i.db_article_write.content.2.63383caapef4p9")
@@ -162,15 +163,82 @@ def uploadDaYu(videoBean):
     sleep(3)
     browser.find_element_by_xpath("//button[text()='确认发表']").click()
 
+# B站
+def uploadBilibili(videoBean):
+    wait = ui.WebDriverWait(browser, 600)  # 10秒内每隔500毫秒扫描1次页面变化
+    browser.execute_script('window.open()')
+    browser.switch_to_window(browser.window_handles[len(browser.window_handles)-1])
+    browser.get("https://member.bilibili.com/v2?spm_id_from=333.851.b_696e7465726e6174696f6e616c486561646572.29#/upload/video/frame")
+    sleep(3)
+   
+    # 开始上传B站
+    iframe=browser.find_element_by_xpath("//iframe[@name='videoUpload']")
+    browser.switch_to_frame(iframe)
+    browser.find_element_by_xpath("//input[@name='buploader']").send_keys(videoBean.videoPath)
+    sleep(3)
+    browser.find_element_by_xpath("//div[@class='cover-v2-preview']/input").send_keys(videoBean.picPath)
+    sleep(2)
+    browser.find_element_by_xpath("//div[@class='cover-chop-modal-v2-foot']/div").click()
+    sleep(3)
+    browser.find_element_by_xpath("//div[@class='select-box-v2-controller']").click()
+    sleep(1)
+    browser.find_element_by_xpath("//div[@class='drop-cascader-list-item']").click()
+    sleep(1)
+    tag=browser.find_element_by_xpath("//div[@class='content-tag-v2-input-wrp']//input")
+    tag.send_keys("体育")
+    tag.send_keys(Keys.ENTER)
+    sleep(1)
+    tag.send_keys("羽毛球")
+    tag.send_keys(Keys.ENTER)
+    sleep(1)
+    tag.send_keys("赛事")
+    tag.send_keys(Keys.ENTER)
+    wait.until(lambda driver: browser.find_element_by_xpath("//i[@class='icon-success-v2']"))
+    browser.execute_script("window.scrollTo(0,document.body.scrollHeight)")
+    sleep(1)
+    browser.find_element_by_xpath("//span[@class='submit-btn-group-add']").click()
+    # B站上传成功
+
+# 爱奇艺
+def uploadIqiyi(videoBean):
+    wait = ui.WebDriverWait(browser, 600)  # 10秒内每隔500毫秒扫描1次页面变化
+    browser.execute_script('window.open()')
+    browser.switch_to_window(browser.window_handles[len(browser.window_handles)-1])
+    browser.get("https://mp.iqiyi.com/wemedia/publish/video")
+    sleep(3)
+    browser.find_element_by_xpath("//input").send_keys(videoBean.videoPath)
+    sleep(8)
+    browser.find_element_by_xpath("//input[@class='mp-upload__input']").send_keys(videoBean.picPath)
+    sleep(2)
+    browser.find_element_by_xpath("//input[@placeholder='选择分类']").click()
+    sleep(1)
+    browser.find_element_by_xpath("//span[text()='体育']/..").click()
+    sleep(1)
+    tag=browser.find_element_by_xpath("//div[@class='mp-input__multiple mp-input--tag']/input")
+    tag.send_keys("体育")
+    tag.send_keys(Keys.ENTER)
+    sleep(1)
+    tag.send_keys("羽毛球")
+    tag.send_keys(Keys.ENTER)
+    sleep(1)
+    tag.send_keys("赛事")
+    tag.send_keys(Keys.ENTER)
+    browser.find_element_by_xpath("//span[@class='mp-radio__label']").click()
+    wait.until(lambda driver: browser.find_element_by_xpath("//div[@class='ai-pro']"))
+    browser.execute_script("window.scrollTo(0,document.body.scrollHeight)")
+    sleep(1)
+    browser.find_element_by_xpath("//button[@class='mp-button mp-button--success is-animate']").click()
 def onPublishVideo(videoBean):
         print(videoBean.title)
         print(videoBean.desc)
         print(videoBean.videoPath)
         print(videoBean.picPath)
-        # uploadTaoTiao(videoBean)
-        # uploadBaiJiaHao(videoBean)
-        # uploadDaYu(videoBean)
-        uploadQiE(videoBean)
+        uploadTaoTiao(videoBean)
+        uploadBaiJiaHao(videoBean)
+        uploadDaYu(videoBean)
+        uploadIqiyi(videoBean)
+        # uploadBilibili(videoBean)
+        # uploadQiE(videoBean)
 
 if __name__ == "__main__":
     chrome_options = Options()
