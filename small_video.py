@@ -126,7 +126,7 @@ def uploadDayu(videoBean):
     # sleep(2)
     # browser.find_element_by_xpath("//button[text()='保存']").click()   
     # sleep(8)
-    
+    sleep(3)
     browser.find_element_by_xpath("//div[@class='minivideo_opt']//button[@class='w-btn w-btn_primary']").click()   
 
 
@@ -146,17 +146,56 @@ def uploadIqiyi(videoBean):
     browser.find_element_by_xpath("//input[@class='mp-input__inner']").send_keys(Keys.CONTROL + "a")
     browser.find_element_by_xpath("//input[@class='mp-input__inner']").send_keys(videoBean.title)
     browser.find_element_by_xpath("//button[@class='mp-button mp-button--success is-animate']").click() 
+
+
+# 一点号
+def uploadYIDian(videoBean):
+    wait = ui.WebDriverWait(browser, 600)  # 10秒内每隔500毫秒扫描1次页面变化
+    browser.execute_script('window.open()')
+    browser.switch_to_window(browser.window_handles[len(browser.window_handles)-1])
+    browser.get("https://mp.yidianzixun.com/#/Writing/videoEditor")
+    sleep(3)
+    browser.find_element_by_xpath("//input").send_keys(videoBean.videoPath)
+    sleep(4)
+    browser.find_element_by_xpath("//input[@class='cascader-input']").click()
+    sleep(1)
+    browser.find_element_by_xpath("//li[@title='体育']").click()
+    sleep(1)
+    browser.find_element_by_xpath("//div[@class='cover-container']").click()
+    sleep(1)
+    browser.find_element_by_xpath("//div[text()='本地上传      ']").click()
+    sleep(1)
+    browser.find_element_by_xpath("//div[@class='mp-uploader-container cover-border']//input").send_keys(videoBean.picPath)
+    sleep(6)
+    browser.find_element_by_xpath("//div[@class='confirm-btn btn-box']").click()
+    sleep(3)
+    wait.until(lambda driver: browser.find_element_by_xpath("//span[@class='mp-success']"))
+    sleep(1)
+    browser.find_element_by_xpath("//button[@class='mp-btn mp-btn-large mp-btn-primary']").click()
+    sleep(1)
+    browser.find_element_by_xpath("//input[@placeholder='请填写']").send_keys(Keys.CONTROL + "a")
+    browser.find_element_by_xpath("//input[@placeholder='请填写']").send_keys(videoBean.title)
+    browser.find_element_by_xpath("//div[@class='btn-container']/button[@class='mp-btn mp-btn-primary mp-btn-large']").click()
+    print("一点号上传成功")
 def onPublishVideo(videoBean):
         print(videoBean.title)
         print(videoBean.desc)
         print(videoBean.videoPath)
         print(videoBean.picPath)
+        # 头条
         uploadTaoTiao(videoBean)
+        # 全民
         uploadQuanming(videoBean)
+        # 快手
         uploadKuaishou(videoBean)
+        # 抖音
         uploadDouyin(videoBean)
+        # 大鱼号
         uploadDayu(videoBean)
+        # 爱奇艺
         uploadIqiyi(videoBean)
+        # 一点号
+        uploadYIDian(videoBean)
 
 
 if __name__ == "__main__":

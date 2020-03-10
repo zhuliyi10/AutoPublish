@@ -44,6 +44,7 @@ def uploadTaoTiao(videoBean):
     browser.execute_script("window.scrollTo(0,document.body.scrollHeight)")
     sleep(1)
     wait.until(lambda driver: browser.find_element_by_xpath("//div[@class='byte-select video-tags-select byte-select-size-large byte-select-multiple']"))
+    sleep(1)
     browser.find_element_by_xpath("//div[@class='byte-select video-tags-select byte-select-size-large byte-select-multiple']").click()
     ActionChains(browser).send_keys("体育").send_keys(Keys.ENTER).perform()
     ActionChains(browser).send_keys("羽毛球").send_keys(Keys.ENTER).perform()
@@ -143,9 +144,9 @@ def uploadDaYu(videoBean):
     sleep(1)
     
     browser.find_element_by_xpath("//div[@id='coverImg']/input").send_keys(videoBean.picPath)
-    sleep(3)
+    sleep(8)
     browser.find_element_by_xpath("//div[@class='article-material-image-dialog_root']//button").click()
-    sleep(2)
+    sleep(3)
     
     browser.find_element_by_xpath("//div[@class='article-write_video-tags form-control']").click()
     sleep(1)
@@ -197,7 +198,7 @@ def uploadBilibili(videoBean):
     browser.execute_script("window.scrollTo(0,document.body.scrollHeight)")
     sleep(1)
     browser.find_element_by_xpath("//span[@class='submit-btn-group-add']").click()
-    # B站上传成功
+    print("B站上传成功")
 
 # 爱奇艺
 def uploadIqiyi(videoBean):
@@ -228,6 +229,95 @@ def uploadIqiyi(videoBean):
     browser.execute_script("window.scrollTo(0,document.body.scrollHeight)")
     sleep(1)
     browser.find_element_by_xpath("//button[@class='mp-button mp-button--success is-animate']").click()
+    print("爱奇艺上传成功")
+
+# 一点号
+def uploadYIDian(videoBean):
+    wait = ui.WebDriverWait(browser, 600)  # 10秒内每隔500毫秒扫描1次页面变化
+    browser.execute_script('window.open()')
+    browser.switch_to_window(browser.window_handles[len(browser.window_handles)-1])
+    browser.get("https://mp.yidianzixun.com/#/Writing/videoEditor")
+    sleep(3)
+    browser.find_element_by_xpath("//input").send_keys(videoBean.videoPath)
+    sleep(4)
+    browser.find_element_by_xpath("//input[@class='cascader-input']").click()
+    sleep(1)
+    browser.find_element_by_xpath("//li[@title='体育']").click()
+    sleep(1)
+    browser.find_element_by_xpath("//div[@class='cover-container']").click()
+    sleep(1)
+    browser.find_element_by_xpath("//div[text()='本地上传      ']").click()
+    sleep(1)
+    browser.find_element_by_xpath("//div[@class='mp-uploader-container cover-border']//input").send_keys(videoBean.picPath)
+    sleep(6)
+    browser.find_element_by_xpath("//div[@class='confirm-btn btn-box']").click()
+    sleep(3)
+    wait.until(lambda driver: browser.find_element_by_xpath("//span[@class='mp-success']"))
+    sleep(1)
+    browser.find_element_by_xpath("//button[@class='mp-btn mp-btn-large mp-btn-primary']").click()
+    sleep(1)
+    browser.find_element_by_xpath("//div[@class='btn-container']/button[@class='mp-btn mp-btn-primary mp-btn-large']").click()
+    print("一点号上传成功")
+
+# 搜狐号
+def uploadSohu(videoBean):
+    wait = ui.WebDriverWait(browser, 600)  # 10秒内每隔500毫秒扫描1次页面变化
+    browser.execute_script('window.open()')
+    browser.switch_to_window(browser.window_handles[len(browser.window_handles)-1])
+    browser.get("https://mp.sohu.com/mpfe/v3/main/news/addvideo")
+    sleep(3)
+    browser.find_element_by_xpath("//input[@name='video']").send_keys(videoBean.videoPath)
+    sleep(3)
+    browser.find_element_by_xpath("//input[@id='crop-upload-file']").send_keys(videoBean.picPath)
+    sleep(6)
+    browser.find_element_by_xpath("//button[@class='sure-btn']").click()
+    sleep(5)
+    browser.find_element_by_xpath("//span[text()='请选择']").click()
+    sleep(1)
+    browser.find_element_by_xpath("//li[text()='羽毛球']").click()
+    sleep(1)
+    wait.until(lambda driver: browser.find_element_by_xpath("//p[@class='upload-tip upload-success']"))
+    sleep(1)
+    browser.find_element_by_xpath("//textarea[@class='abstract-textarea']").send_keys(browser.find_element_by_xpath("//input[@class='titleErrorInput']").get_attribute('value'))
+    browser.find_element_by_xpath("//span[text()='发布']").click()
+    print("搜狐号上传成功")
+
+# 网易号
+def upload163(videoBean):
+    wait = ui.WebDriverWait(browser, 600)  # 10秒内每隔500毫秒扫描1次页面变化
+    browser.execute_script('window.open()')
+    browser.switch_to_window(browser.window_handles[len(browser.window_handles)-1])
+    browser.get("http://mp.163.com/index.html#/post/video?wemediaId=W754906828151472311")
+    sleep(3)   
+    browser.find_element_by_xpath("//input").send_keys(videoBean.videoPath)
+    sleep(3)
+    browser.find_element_by_xpath("//div[@class='ne-input-mask-content']").click()
+    sleep(1)
+    browser.find_element_by_xpath("//input[@class='ne-input']").send_keys("羽毛球")
+    sleep(1)
+    browser.find_element_by_xpath("//span[text()='体育/羽毛球']").click()
+    sleep(1)
+    browser.execute_script("window.scrollTo(0,document.body.scrollHeight)")
+    sleep(1)
+    browser.find_element_by_xpath("//span[@class='ne-tag ne-tag-medium ne-tag-create']").click()
+    sleep(1)
+    ActionChains(browser).send_keys("体育").perform()
+    ActionChains(browser).send_keys(Keys.ENTER).perform()
+    sleep(1)
+    ActionChains(browser).send_keys("羽毛球").perform()
+    ActionChains(browser).send_keys(Keys.ENTER).perform()
+    sleep(1)
+    ActionChains(browser).send_keys("赛事").perform()
+    ActionChains(browser).send_keys(Keys.ENTER).perform()
+    browser.find_element_by_xpath("//input[@class='cropper-input']").send_keys(videoBean.picPath)
+    sleep(1)
+    browser.find_element_by_xpath("//div[@class='column']/button[@class='ne-btn ne-btn-primary ne-btn-medium']").click()
+    sleep(6)
+    wait.until(lambda driver: browser.find_element_by_xpath("//div[@class='row info']/div[@class='column']"))
+    browser.find_element_by_xpath("//button[@class='ne-btn ne-btn-primary ne-btn-medium form-submit-btn']").click()
+    sleep(2)
+    browser.find_element_by_xpath("//button[@class='ne-btn ne-btn-medium ne-btn-hollow']").click()
+    print("网易号上传成功")
 def onPublishVideo(videoBean):
         print(videoBean.title)
         print(videoBean.desc)
@@ -237,8 +327,14 @@ def onPublishVideo(videoBean):
         uploadBaiJiaHao(videoBean)
         uploadDaYu(videoBean)
         uploadIqiyi(videoBean)
-        # uploadBilibili(videoBean)
-        # uploadQiE(videoBean)
+        uploadYIDian(videoBean)
+        uploadSohu(videoBean)
+        uploadBilibili(videoBean)
+        uploadQiE(videoBean)
+        # upload163(videoBean)
+        
+
+
 
 if __name__ == "__main__":
     chrome_options = Options()
